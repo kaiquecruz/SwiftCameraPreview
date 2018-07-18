@@ -4,8 +4,8 @@ var SwiftCameraPreview = {
         cordova.exec(success, error, "SwiftCameraPreview", "showPreviewCamera", [arg0, arg1, arg2, arg3, arg4]);
     },
 
-    takePicture: function(success, error) {
-        cordova.exec(success, error, "SwiftCameraPreview", "takePicture", []);
+    takePicture: function(success, error, arg0) {
+        cordova.exec(success, error, "SwiftCameraPreview", "takePicture", [arg0]);
     },
 
     showPicture: function(success, error) {
