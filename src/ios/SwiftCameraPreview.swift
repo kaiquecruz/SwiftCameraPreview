@@ -84,9 +84,9 @@ import AVFoundation
                 }
 		
 		if (camera == "back") {
-			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.leftMirrored)
-      		} else {
 			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.up)
+      		} else {
+			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.leftMirrored)
         	}
 
                 let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK")
