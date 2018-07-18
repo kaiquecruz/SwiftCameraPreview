@@ -84,7 +84,7 @@ import AVFoundation
                 }
 		
 		if (camera == "back") {
-			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.up)
+			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.right)
       		} else {
 			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.leftMirrored)
         	}
