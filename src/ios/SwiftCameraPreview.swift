@@ -28,37 +28,40 @@ import AVFoundation
         let height = command.argument(at: 3) as? Int ?? 0
         let camera = command.argument(at: 4) as? String ?? "back"
 
-		var captureDevice: AVCaptureDevice?
-		if (camera == "back") {
-            captureDevice = getDevice(position: AVCaptureDevice.Position.back)
+	var captureDevice: AVCaptureDevice?
+	if (camera == "back") {
+		captureDevice = getDevice(position: AVCaptureDevice.Position.back)
         } else {
-        	captureDevice = getDevice(position: AVCaptureDevice.Position.front)
+		captureDevice = getDevice(position: AVCaptureDevice.Position.front)
         }
 
-		do {
-			let input = try AVCaptureDeviceInput(device: captureDevice!)
-            captureSession = AVCaptureSession()
-            captureSession?.addInput(input)
+	do {
+		let input = try AVCaptureDeviceInput(device: captureDevice!)
+           	captureSession = AVCaptureSession()
+		captureSession?.addInput(input)
 
-            videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
-            videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-            videoPreviewLayer?.frame = CGRect(x: x, y: y, width: width, height: height)
-            self.webView.layer.addSublayer(videoPreviewLayer!)
+		videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+		videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+		videoPreviewLayer?.frame = CGRect(x: x, y: y, width: width, height: height)
+		self.webView.layer.addSublayer(videoPreviewLayer!)
 
-            capturePhotoOutput = AVCaptureStillImageOutput()
-            captureSession?.addOutput(capturePhotoOutput!)
+		capturePhotoOutput = AVCaptureStillImageOutput()
+		captureSession?.addOutput(capturePhotoOutput!)
 
-            captureSession?.startRunning()
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK")
-            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-		} catch {
-			print(error)
-			let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Showing Camera Preview failed.")
-            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-		}
+		captureSession?.startRunning()
+		let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK")
+		self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+	} catch {
+		print(error)
+		let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Showing Camera Preview failed.")
+            	self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
 	}
+    }
 
-	func takePicture(_ command: CDVInvokedUrlCommand) {
+    func takePicture(_ command: CDVInvokedUrlCommand) {
+		
+		let camera = command.argument(at: 0) as? String ?? "back"
+		
 		if let videoConnection = capturePhotoOutput?.connection(withMediaType: AVMediaTypeVideo) {
         	capturePhotoOutput?.captureStillImageAsynchronously(from: videoConnection) {
         		(imageDataSampleBuffer, error) -> Void in
@@ -79,14 +82,18 @@ import AVFoundation
                 	self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
                 	return
                 }
-
-                self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.leftMirrored)
+		
+		if (camera == "back") {
+			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.leftMirrored)
+      		} else {
+			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.up)
+        	}
 
                 let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK")
                 self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
         	}
         }
-	}
+    }
 
     func showPicture(_ command: CDVInvokedUrlCommand) {
         let imageData: NSData = UIImageJPEGRepresentation(photoOutput, 1.0)! as NSData
