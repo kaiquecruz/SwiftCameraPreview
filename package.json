@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Cordova plugin for show camera preview and display output only in iOS.",
   "cordova": {
-    "id": "com-qduriani-SwiftCameraPreview",
+    "id": "com-nexussmart-swiftcamerapreview",
     "platforms": [
       "ios"
     ]
