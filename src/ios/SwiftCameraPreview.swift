@@ -9,7 +9,7 @@ import AVFoundation
 
     var photoOutput: UIImage!
 
-    func getDevice(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+    @objc(getDevice:) func getDevice(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
     		let devices: NSArray = AVCaptureDevice.devices() as NSArray;
     		for de in devices {
     			let deviceConverted = de as! AVCaptureDevice
@@ -20,7 +20,7 @@ import AVFoundation
     	return nil
     }
 
-    func showPreviewCamera(_ command: CDVInvokedUrlCommand) {
+    @objc(showPreviewCamera:) func showPreviewCamera(_ command: CDVInvokedUrlCommand) {
 
         let x = command.argument(at: 0) as? Int ?? 0
         let y = command.argument(at: 1) as? Int ?? 0
@@ -41,7 +41,7 @@ import AVFoundation
 		captureSession?.addInput(input)
 
 		videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
-		videoPreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
+		videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
 		videoPreviewLayer?.frame = CGRect(x: x, y: y, width: width, height: height)
 		self.webView.layer.addSublayer(videoPreviewLayer!)
 
@@ -58,11 +58,11 @@ import AVFoundation
 	}
     }
 
-    func takePicture(_ command: CDVInvokedUrlCommand) {
+    @objc(takePicture:) func takePicture(_ command: CDVInvokedUrlCommand) {
 		
 		let camera = command.argument(at: 0) as? String ?? "back"
 		
-		if let videoConnection = capturePhotoOutput?.connection(withMediaType: AVMediaTypeVideo) {
+		if let videoConnection = capturePhotoOutput?.connection(with: AVMediaType.video) {
         	capturePhotoOutput?.captureStillImageAsynchronously(from: videoConnection) {
         		(imageDataSampleBuffer, error) -> Void in
 
@@ -72,7 +72,8 @@ import AVFoundation
                     self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
                 	return
                 }
-				guard let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer) else {
+                
+				guard let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(imageDataSampleBuffer.unsafelyUnwrapped) else {
 				    let pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "Failed to create ImageData from AVCaptureSession")
                     self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
 				    return
@@ -95,7 +96,7 @@ import AVFoundation
         }
     }
 
-    func showPicture(_ command: CDVInvokedUrlCommand) {
+    @objc(showPicture:) func showPicture(_ command: CDVInvokedUrlCommand) {
         let imageData: NSData = UIImageJPEGRepresentation(photoOutput, 1.0)! as NSData
         let strImage: String = imageData.base64EncodedString(options: .lineLength64Characters)
 
@@ -106,7 +107,7 @@ import AVFoundation
         self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
 	}
 
-	func stopPreviewCamera(_ command: CDVInvokedUrlCommand) {
+	@objc(stopPreviewCamera:) func stopPreviewCamera(_ command: CDVInvokedUrlCommand) {
 	    captureSession?.stopRunning()
 	    videoPreviewLayer?.removeFromSuperlayer()
 	}
