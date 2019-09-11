@@ -44,7 +44,7 @@ import AVFoundation
 		videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
 		videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
 		videoPreviewLayer?.frame = CGRect(x: x, y: y, width: width, height: height)
-        	videoPreviewLayer?.zPosition = z
+        	videoPreviewLayer?.zPosition = CGFloat(z)
 		self.webView.layer.addSublayer(videoPreviewLayer!)
 
 		capturePhotoOutput = AVCaptureStillImageOutput()
