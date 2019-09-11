@@ -24,9 +24,10 @@ import AVFoundation
 
         let x = command.argument(at: 0) as? Int ?? 0
         let y = command.argument(at: 1) as? Int ?? 0
-        let width = command.argument(at: 2) as? Int ?? 0
-        let height = command.argument(at: 3) as? Int ?? 0
-        let camera = command.argument(at: 4) as? String ?? "back"
+        let z = command.argument(at: 2) as? Int ?? 0
+        let width = command.argument(at: 3) as? Int ?? 0
+        let height = command.argument(at: 4) as? Int ?? 0
+        let camera = command.argument(at: 5) as? String ?? "back"
 
 	var captureDevice: AVCaptureDevice?
 	if (camera == "back") {
@@ -43,6 +44,7 @@ import AVFoundation
 		videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
 		videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
 		videoPreviewLayer?.frame = CGRect(x: x, y: y, width: width, height: height)
+        	videoPreviewLayer?.zPosition = y
 		self.webView.layer.addSublayer(videoPreviewLayer!)
 
 		capturePhotoOutput = AVCaptureStillImageOutput()
