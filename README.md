@@ -6,7 +6,7 @@ CameraToUse: "back" | "front"
 
 EncodedImg: base64EncodedString Image, decode with: "data:image/jpeg;base64," + EncodedImg;
 
-- SwiftCameraPreview.showPreviewCamera(function s(msg){}, function e(msg){}, anchorX, anchorY, width, height, CameraToUse);
+- SwiftCameraPreview.showPreviewCamera(function s(msg){}, function e(msg){}, anchorX, anchorY, anchorZ, width, height, CameraToUse);
 
 - SwiftCameraPreview.takePicture(function s(msg){}, function e(msg){}, CameraToUse);
 
