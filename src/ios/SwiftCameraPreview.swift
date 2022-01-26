@@ -1,3 +1,4 @@
+import Cordova
 import UIKit
 import AVFoundation
 
@@ -87,9 +88,9 @@ import AVFoundation
                 }
 		
 		if (camera == "back") {
-			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.right)
+            self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImage.Orientation.right)
       		} else {
-			self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImageOrientation.leftMirrored)
+                self.photoOutput = UIImage(cgImage: tmp.cgImage!, scale: 1.0, orientation: UIImage.Orientation.leftMirrored)
         	}
 
                 let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "OK")
@@ -99,7 +100,7 @@ import AVFoundation
     }
 
     @objc(showPicture:) func showPicture(_ command: CDVInvokedUrlCommand) {
-        let imageData: NSData = UIImageJPEGRepresentation(photoOutput, 1.0)! as NSData
+        let imageData: NSData = photoOutput.jpegData(compressionQuality: 1.0)! as NSData
         let strImage: String = imageData.base64EncodedString(options: .lineLength64Characters)
 
         captureSession?.stopRunning()
